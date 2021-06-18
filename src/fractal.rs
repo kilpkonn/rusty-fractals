@@ -31,7 +31,7 @@ impl Fractal {
         Ok(Fractal { program })
     }
 
-    pub fn draw(&self, mvp_matrix: &[f32], window_size: (i32, i32), time: f32) {
+    pub fn draw(&self, mvp_matrix: &[f32], window_size: (u32, u32), time: f32) {
         self.program.set_used();
         let position_handle = self.program.get_attrib_location("vPosition").unwrap();
         let matrix_handle = self.program.get_uniform_location("uMVPMatrix").unwrap();

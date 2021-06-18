@@ -16,8 +16,10 @@ fn main() {
     gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
     gl_attr.set_context_version(2, 1);
 
+    let mut window_size = (800, 600);
+
     let window = video_subsystem
-        .window("Rusty Fractals", 800, 600)
+        .window("Rusty Fractals", window_size.0, window_size.1)
         // .position_centered()
         .resizable()
         .opengl()
@@ -30,19 +32,17 @@ fn main() {
 
     println!("Hello, world!");
 
-    let mut window_size = (800, 600);
-
     unsafe {
         gl::Enable(0x8861);
-        gl::Viewport(0, 0, window_size.0, window_size.1);
+        gl::Viewport(0, 0, window_size.0 as i32, window_size.1 as i32);
         gl::ClearColor(0.0, 0.0, 0.0, 1.0);
     }
 
-    let mut zoom: f64 = 1.0;
-    let mut target_zoom: f64 = 1.0;
+    let mut zoom: f64 = 0.6;
+    let mut target_zoom: f64 = 0.3;
 
-    let mut ratio: f32 = 800.0 / 600.0;
-    let mut fractal_pos: (f32, f32) = (1.0, 1.0);
+    let mut ratio: f32 = window_size.0 as f32 / window_size.1 as f32;
+    let mut fractal_pos: (f32, f32) = (-1.0, 1.0);
 
     let mut now: u64 = timer_subsystem.performance_counter();
     let mut last: u64;
@@ -61,14 +61,14 @@ fn main() {
                 Event::Quit {..} => break 'main,
                 Event::Window { win_event: WindowEvent::Resized(width, height), .. } => {
                     unsafe { gl::Viewport(0, 0, width, height); }
-                    window_size = (width, height);
+                    window_size = (width as u32, height as u32);
                     ratio = width as f32 / height as f32;
                 },
                 _ => ()
             };
         }
 
-        if target_zoom < 0.2 { target_zoom = 0.2; }
+        if target_zoom < 0.1 { target_zoom = 0.1; }
 
         let keyboard_state = KeyboardState::new(&event_pump);
         if keyboard_state.is_scancode_pressed(Scancode::Left)
