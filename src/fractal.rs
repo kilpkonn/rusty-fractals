@@ -25,12 +25,12 @@ impl Fractal {
             &CString::new(include_str!("../assets/mandelbrot.glsl")).unwrap()
         )?;
 
-        let geometry_shader = Shader::from_frag_source(
-            &CString::new(include_str!("../assets/bifurcation.geom")).unwrap()
-        )?;
+        // let geometry_shader = Shader::from_frag_source(
+        //     &CString::new(include_str!("../assets/bifurcation.geom")).unwrap()
+        // )?;
 
         let program = ShaderProgram::from_shaders(
-            &[vertex_shader, fragment_shader, geometry_shader]
+            &[vertex_shader, fragment_shader,] // geometry_shader]
         )?;
         program.set_used();
 

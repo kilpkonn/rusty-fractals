@@ -92,8 +92,8 @@ fn main() {
             -fractal_pos.0, -fractal_pos.1, 0.0, 1.0
         ];
 
-        //fractal.draw(fractal_matrix, window_size, time);
-        fractal.draw_bifurcation(window_size, time);
+        fractal.draw(fractal_matrix, window_size, time);
+        // fractal.draw_bifurcation(window_size, time);
         window.gl_swap_window();
     }
 }
