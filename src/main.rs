@@ -20,7 +20,6 @@ fn main() {
 
     let window = video_subsystem
         .window("Rusty Fractals", window_size.0, window_size.1)
-        // .position_centered()
         .resizable()
         .opengl()
         .build()
@@ -30,10 +29,7 @@ fn main() {
     let _gl = gl::load_with(|s| video_subsystem.gl_get_proc_address(s) as *const std::os::raw::c_void);
     let fractal = Fractal::new().unwrap();
 
-    println!("Hello, world!");
-
     unsafe {
-        gl::Enable(0x8861);
         gl::Viewport(0, 0, window_size.0 as i32, window_size.1 as i32);
         gl::ClearColor(0.0, 0.0, 0.0, 1.0);
     }
@@ -83,7 +79,7 @@ fn main() {
         if keyboard_state.is_scancode_pressed(Scancode::KpMinus) { target_zoom /= 1.02 }
 
         zoom = zoom.lerp(target_zoom, delta_time / 700.0);
-        println!("Ratio: {}, Zoom: {}", ratio, zoom as f32);
+        println!("Ratio: {}, Zoom: {}\r", ratio, zoom as f32);
 
         unsafe {
             gl::Clear(gl::COLOR_BUFFER_BIT);
@@ -96,8 +92,8 @@ fn main() {
             -fractal_pos.0, -fractal_pos.1, 0.0, 1.0
         ];
 
-        fractal.draw(fractal_matrix, window_size, time);
-
+        //fractal.draw(fractal_matrix, window_size, time);
+        fractal.draw_bifurcation(window_size, time);
         window.gl_swap_window();
     }
 }
