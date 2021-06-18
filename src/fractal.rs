@@ -22,7 +22,7 @@ impl Fractal {
         )?;
 
         let fragment_shader = Shader::from_frag_source(
-            &CString::new(include_str!("../assets/mandelbrot.glsl")).unwrap()
+            &CString::new(include_str!("../assets/julia.glsl")).unwrap()
         )?;
 
         let program = ShaderProgram::from_shaders(&[vertex_shader, fragment_shader])?;

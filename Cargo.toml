@@ -10,3 +10,4 @@ edition = "2018"
 sdl2 = { version = "0.32.2", features = [ "bundled" ] }
 gl = "0.13.0"
 lerp = "0.2.0"
+png = "0.16.8"

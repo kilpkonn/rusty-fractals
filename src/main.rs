@@ -16,7 +16,7 @@ fn main() {
     gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
     gl_attr.set_context_version(2, 1);
 
-    let mut window_size = (800, 600);
+    let mut window_size = (1000, 800);
 
     let window = video_subsystem
         .window("Rusty Fractals", window_size.0, window_size.1)
