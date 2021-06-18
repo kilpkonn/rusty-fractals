@@ -22,7 +22,7 @@ impl Fractal {
         )?;
 
         let fragment_shader = Shader::from_frag_source(
-            &CString::new(include_str!("../assets/fragment.glsl")).unwrap()
+            &CString::new(include_str!("../assets/mandelbrot.glsl")).unwrap()
         )?;
 
         let program = ShaderProgram::from_shaders(&[vertex_shader, fragment_shader])?;
@@ -31,15 +31,17 @@ impl Fractal {
         Ok(Fractal { program })
     }
 
-    pub fn draw(&self, mvp_matrix: &[f32], window_size: (i32, i32)) {
+    pub fn draw(&self, mvp_matrix: &[f32], window_size: (i32, i32), time: f32) {
         self.program.set_used();
         let position_handle = self.program.get_attrib_location("vPosition").unwrap();
         let matrix_handle = self.program.get_uniform_location("uMVPMatrix").unwrap();
+        let time_handle = self.program.get_uniform_location("uTimeDiff").unwrap();
         let window_size_handle = self.program.get_uniform_location("uWindowSize").unwrap();
         
         unsafe {
             gl::UniformMatrix4fv(matrix_handle, 1, 0, mvp_matrix.as_ptr());
             gl::Uniform2f(window_size_handle, window_size.0 as f32, window_size.1 as f32);
+            gl::Uniform1f(time_handle, time);
             gl::EnableVertexAttribArray(position_handle as u32);
             gl::VertexAttribPointer(
                 position_handle as u32, 3,

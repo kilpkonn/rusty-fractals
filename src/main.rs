@@ -18,7 +18,7 @@ fn main() {
 
     let window = video_subsystem
         .window("Rusty Fractals", 800, 600)
-        .position_centered()
+        // .position_centered()
         .resizable()
         .opengl()
         .build()
@@ -48,11 +48,13 @@ fn main() {
     let mut last: u64;
 
     let mut event_pump = sdl.event_pump().unwrap();
+    let mut time = 0f32;
     'main: loop {
         last = now;
         now = timer_subsystem.performance_counter();
         let mut delta_time: f64 = (((now - last) * 1000) as f64 / timer_subsystem.performance_frequency() as f64) as f64;
         if delta_time > 670.0 { delta_time = 670.0 };
+        time += delta_time as f32;
 
         for event in event_pump.poll_iter() {
             match event {
@@ -61,9 +63,6 @@ fn main() {
                     unsafe { gl::Viewport(0, 0, width, height); }
                     window_size = (width, height);
                     ratio = width as f32 / height as f32;
-                },
-                Event::MouseWheel { y, .. } => {
-                    target_zoom += (y as f64) * target_zoom;
                 },
                 _ => ()
             };
@@ -80,6 +79,8 @@ fn main() {
             || keyboard_state.is_scancode_pressed(Scancode::W) { fractal_pos.1 -= ((delta_time / 1000.0) / zoom) as f32; }
         if keyboard_state.is_scancode_pressed(Scancode::Down)
             || keyboard_state.is_scancode_pressed(Scancode::S) { fractal_pos.1 += ((delta_time / 1000.0) / zoom) as f32; }
+        if keyboard_state.is_scancode_pressed(Scancode::KpPlus) { target_zoom *= 1.02; }
+        if keyboard_state.is_scancode_pressed(Scancode::KpMinus) { target_zoom /= 1.02 }
 
         zoom = zoom.lerp(target_zoom, delta_time / 700.0);
         println!("Ratio: {}, Zoom: {}", ratio, zoom as f32);
@@ -95,7 +96,7 @@ fn main() {
             -fractal_pos.0, -fractal_pos.1, 0.0, 1.0
         ];
 
-        fractal.draw(fractal_matrix, window_size);
+        fractal.draw(fractal_matrix, window_size, time);
 
         window.gl_swap_window();
     }
